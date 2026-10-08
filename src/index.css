@@ -152,16 +152,21 @@
     opacity: 0;
   }
 }
+/* The dialog is centred with the translate property (-50% -50%), so these
+   animate translate and scale on their own and never add a second shift with
+   transform, which made it slide in from the left. */
 @keyframes dialog-in {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.98);
+    translate: -50% -48%;
+    scale: 0.98;
   }
 }
 @keyframes dialog-out {
   to {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.98);
+    translate: -50% -48%;
+    scale: 0.98;
   }
 }
 .dialog-overlay[data-state="open"] {
