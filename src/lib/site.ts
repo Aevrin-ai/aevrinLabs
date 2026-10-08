@@ -3,12 +3,10 @@
 export const BRAND = "Aevrinlabs";
 export const SITE_URL = "https://aevrinlabs.com";
 
-/*
-  One Formspree form takes both the waitlist and the contact form; each sends
-  its own subject line so the two are easy to tell apart in the inbox. Set
-  VITE_FORMSPREE_ID in .env (see .env.example).
-*/
-export const FORM_ID: string = import.meta.env.VITE_FORMSPREE_ID ?? "";
+// Where both forms are delivered. Each sends its own subject line, so
+// waitlist signups and contact messages are easy to tell apart in the inbox.
+export const CONTACT_EMAIL = "contact@aevrinlabs.com";
+export const FORM_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
 // How every form field and its label look, on the contact page and in the
 // waitlist dialog alike.

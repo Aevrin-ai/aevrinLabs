@@ -2,13 +2,8 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { renderPage, stubFormspree } from "@/test/helpers";
+import { renderPage, stubFormSubmit } from "@/test/helpers";
 import WaitlistForm from "./form";
-
-vi.mock("@/lib/site", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/site")>()),
-  FORM_ID: "testform",
-}));
 
 async function fillIn() {
   const user = userEvent.setup();
@@ -43,13 +38,13 @@ describe("the waitlist form", () => {
     ]);
   });
 
-  it("sends the signup to Formspree, marked as a waitlist signup", async () => {
-    const { sent } = stubFormspree();
+  it("emails the signup to contact@aevrinlabs.com, marked as a waitlist signup", async () => {
+    const { sent } = stubFormSubmit();
     renderPage(<WaitlistForm onDone={() => {}} />);
     await fillIn();
     expect(await screen.findByText("You are on the list.")).toBeInTheDocument();
     expect(sent).toHaveLength(1);
-    expect(sent[0].url).toBe("https://formspree.io/f/testform");
+    expect(sent[0].url).toBe("https://formsubmit.co/ajax/contact@aevrinlabs.com");
     expect(sent[0].body).toMatchObject({
       _subject: "Waitlist signup",
       form: "waitlist",
@@ -61,7 +56,7 @@ describe("the waitlist form", () => {
   });
 
   it("closes from the thank-you message", async () => {
-    stubFormspree();
+    stubFormSubmit();
     const onDone = vi.fn();
     renderPage(<WaitlistForm onDone={onDone} />);
     await fillIn();
@@ -70,7 +65,7 @@ describe("the waitlist form", () => {
   });
 
   it("says so when the signup does not go through", async () => {
-    stubFormspree({ ok: false });
+    stubFormSubmit({ ok: false });
     renderPage(<WaitlistForm onDone={() => {}} />);
     await fillIn();
     expect(await screen.findByRole("alert")).toHaveTextContent("That did not send");

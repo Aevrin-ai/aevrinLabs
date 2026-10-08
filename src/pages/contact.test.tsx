@@ -1,14 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { renderPage, stubFormspree } from "@/test/helpers";
+import { renderPage, stubFormSubmit } from "@/test/helpers";
 import ContactPage from "./contact";
-
-vi.mock("@/lib/site", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/site")>()),
-  FORM_ID: "testform",
-}));
 
 async function send() {
   const user = userEvent.setup();
@@ -30,15 +25,16 @@ describe("the contact page", () => {
   });
 
   it("sends the message, marked as from the contact form, and thanks the sender", async () => {
-    const { sent } = stubFormspree();
+    const { sent } = stubFormSubmit();
     renderPage(<ContactPage />, { path: "/contact" });
     await send();
     expect(await screen.findByText("Thanks, we got it.")).toBeInTheDocument();
+    expect(sent[0].url).toBe("https://formsubmit.co/ajax/contact@aevrinlabs.com");
     expect(sent[0].body).toMatchObject({ _subject: "Contact form", form: "contact", name: "Sam Lee", message: "We use a lot of agents." });
   });
 
   it("lets the sender write another message", async () => {
-    stubFormspree();
+    stubFormSubmit();
     renderPage(<ContactPage />, { path: "/contact" });
     await send();
     await userEvent.click(await screen.findByRole("button", { name: "Send another" }));
@@ -46,7 +42,7 @@ describe("the contact page", () => {
   });
 
   it("shows an error, and keeps the form, when sending fails", async () => {
-    stubFormspree({ ok: false });
+    stubFormSubmit({ ok: false });
     renderPage(<ContactPage />, { path: "/contact" });
     await send();
     expect(await screen.findByRole("alert")).toHaveTextContent("That did not send");

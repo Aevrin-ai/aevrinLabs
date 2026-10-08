@@ -1,4 +1,3 @@
-import { ValidationError } from "@formspree/react";
 import { ArrowRight } from "lucide-react";
 
 import { FIELD, LABEL } from "@/lib/site";
@@ -34,6 +33,8 @@ export default function WaitlistForm({ onDone }: { onDone: () => void }) {
       {/* Tells the inbox this came from the waitlist, not the contact form. */}
       <input type="hidden" name="_subject" value="Waitlist signup" />
       <input type="hidden" name="form" value="waitlist" />
+      {/* Only bots fill this in; see useSiteForm. */}
+      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
@@ -41,7 +42,6 @@ export default function WaitlistForm({ onDone }: { onDone: () => void }) {
             Full name <span className="text-signal-text">*</span>
           </label>
           <input id="waitlist-name" name="name" required autoComplete="name" className={FIELD} />
-          <ValidationError field="name" errors={state.errors} className="text-xs text-red-600 dark:text-red-400" />
         </div>
         <div className="space-y-1.5">
           <label htmlFor="waitlist-company" className={LABEL}>
@@ -56,7 +56,6 @@ export default function WaitlistForm({ onDone }: { onDone: () => void }) {
           Work email <span className="text-signal-text">*</span>
         </label>
         <input id="waitlist-email" type="email" name="email" required autoComplete="email" placeholder="you@company.com" className={FIELD} />
-        <ValidationError field="email" errors={state.errors} className="text-xs text-red-600 dark:text-red-400" />
       </div>
 
       <div className="space-y-1.5">

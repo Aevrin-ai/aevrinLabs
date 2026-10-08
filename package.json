@@ -13,7 +13,6 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@formspree/react": "^3.0.0",
     "@radix-ui/react-dialog": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

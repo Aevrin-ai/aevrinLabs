@@ -1,4 +1,3 @@
-import { ValidationError } from "@formspree/react";
 import { ArrowRight } from "lucide-react";
 
 import { BRAND, FIELD, LABEL } from "@/lib/site";
@@ -32,6 +31,8 @@ function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <input type="hidden" name="_subject" value="Contact form" />
       <input type="hidden" name="form" value="contact" />
+      {/* Only bots fill this in; see useSiteForm. */}
+      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
@@ -39,14 +40,12 @@ function ContactForm() {
             Name <span className="text-signal-text">*</span>
           </label>
           <input id="contact-name" name="name" required autoComplete="name" className={FIELD} />
-          <ValidationError field="name" errors={state.errors} className="text-xs text-red-600 dark:text-red-400" />
         </div>
         <div className="space-y-1.5">
           <label htmlFor="contact-email" className={LABEL}>
             Work email <span className="text-signal-text">*</span>
           </label>
           <input id="contact-email" type="email" name="email" required autoComplete="email" placeholder="you@company.com" className={FIELD} />
-          <ValidationError field="email" errors={state.errors} className="text-xs text-red-600 dark:text-red-400" />
         </div>
       </div>
 
@@ -62,7 +61,6 @@ function ContactForm() {
           Message <span className="text-signal-text">*</span>
         </label>
         <textarea id="contact-message" name="message" required rows={6} className={cn(FIELD, "resize-y")} />
-        <ValidationError field="message" errors={state.errors} className="text-xs text-red-600 dark:text-red-400" />
       </div>
 
       {failed && <FormFailed />}

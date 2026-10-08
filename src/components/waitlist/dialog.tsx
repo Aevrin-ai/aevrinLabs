@@ -6,7 +6,7 @@ import { BRAND } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Eyebrow, HEADING } from "@/components/ui/blocks";
 
-// Formspree loads with the form, the first time the dialog opens.
+// The form loads the first time the dialog opens.
 const WaitlistForm = lazy(() => import("./form"));
 
 type Props = {
