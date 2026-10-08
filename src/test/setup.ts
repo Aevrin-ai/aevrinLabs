@@ -66,3 +66,7 @@ if (!("requestIdleCallback" in window)) {
     cancelIdleCallback: (id: number) => clearTimeout(id),
   });
 }
+
+// jsdom has no media playback; the film only needs play() to resolve.
+Object.defineProperty(HTMLMediaElement.prototype, "play", { configurable: true, value: vi.fn(() => Promise.resolve()) });
+Object.defineProperty(HTMLMediaElement.prototype, "pause", { configurable: true, value: vi.fn() });
