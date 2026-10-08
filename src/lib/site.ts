@@ -5,6 +5,9 @@ export const SITE_URL = "https://aevrinlabs.com";
 
 // Where both forms are delivered. Each sends its own subject line, so
 // waitlist signups and contact messages are easy to tell apart in the inbox.
+// FormSubmit is activated for this address on every page. Its private alias
+// for the address would need activating again page by page, so the plain
+// address stays.
 export const CONTACT_EMAIL = "contact@aevrinlabs.com";
 export const FORM_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
