@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 
+import { CONTACT_EMAIL } from "@/lib/site";
 import { DangerTriangle } from "@/components/ui/solar-icons";
 
 // What a form shows once it has gone through.
@@ -17,12 +18,20 @@ export function FormDone({ title, text, children }: { title: string; text: strin
   );
 }
 
-// What a form shows when sending did not work.
+// What a form shows when sending did not work. The fields were already
+// checked by the browser, so this is a delivery problem: offer the address
+// itself, so no message is lost.
 export function FormFailed() {
   return (
     <p role="alert" className="flex items-start gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-500/10 dark:text-red-200">
       <DangerTriangle className="mt-0.5 size-4 shrink-0" />
-      That did not send. Please check the fields above and try again.
+      <span>
+        That did not send. Please try again in a moment, or email us at{" "}
+        <a href={`mailto:${CONTACT_EMAIL}`} className="font-medium underline underline-offset-2">
+          {CONTACT_EMAIL}
+        </a>
+        .
+      </span>
     </p>
   );
 }

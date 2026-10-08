@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
@@ -45,7 +45,9 @@ describe("the contact page", () => {
     stubFormSubmit({ ok: false });
     renderPage(<ContactPage />, { path: "/contact" });
     await send();
-    expect(await screen.findByRole("alert")).toHaveTextContent("That did not send");
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("That did not send");
+    expect(within(alert).getByRole("link", { name: "contact@aevrinlabs.com" })).toHaveAttribute("href", "mailto:contact@aevrinlabs.com");
     expect(screen.getByRole("button", { name: /Send message/ })).toBeInTheDocument();
   });
 
