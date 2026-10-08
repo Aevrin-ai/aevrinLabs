@@ -4,9 +4,13 @@
 {
   "name": "aevrinlabs",
   "compatibility_date": "2026-10-01",
+  // Runs only for the film, to answer byte-range requests (see worker/).
+  "main": "./worker/index.ts",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/video/*"]
   },
   "routes": [{ "pattern": "aevrinlabs.com", "custom_domain": true }],
   // Served only at aevrinlabs.com, not at a second workers.dev address.
