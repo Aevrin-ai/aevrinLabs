@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* Space Grotesk for headings, body and UI, and JetBrains Mono for code and
+   tags, from the brand kit (assets/05-fonts, SIL Open Font License). */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-500.woff2") format("woff2");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jetbrains-mono-500.woff2") format("woff2");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-signal: var(--signal);
+  --color-signal-text: var(--signal-text);
+  --color-ink: #121316;
+  --color-paper: #f5f3ee;
+  --color-surface: var(--surface);
+  --color-window: var(--window);
+
+  /* The lift under anything floating over the brand pattern: a crisp edge
+     and a long, soft fall-off below. */
+  --shadow-float: 0 1px 2px rgb(18 19 22 / 0.06), 0 30px 60px -30px rgb(18 19 22 / 0.45);
+}
+
+/* Ink, paper and one signal, from assets/06-brand-tokens. Signal orange is
+   for the keyhole, the call to action and highlights, about a tenth of any
+   layout. Orange text on light ground uses --signal-text (5.1:1). */
+:root {
+  --background: #f5f3ee;
+  --foreground: #121316;
+  --card: #fbfaf7;
+  --surface: #ebe7df;
+  --window: #ffffff;
+  --muted: #e2ddd2;
+  --muted-foreground: #5a5c63;
+  --border: #d6d1c6;
+  --ring: #b93c0c;
+  --signal: #ff5a1f;
+  --signal-text: #b93c0c;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121316;
+    --foreground: #f5f3ee;
+    --card: #17181b;
+    --surface: #1c1d21;
+    --window: #202126;
+    --muted: #2c2e34;
+    --muted-foreground: #a4a6ad;
+    --border: #2c2e34;
+    --ring: #ff7a45;
+    --signal-text: #ff7a45;
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--background);
+    @apply font-sans antialiased;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+  }
+  /* The keyboard ring, everywhere: visible, and only for the keyboard. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Page container ───────────────────────────────────────── */
+
+@utility max-w-container {
+  max-width: 1280px;
+  width: 100%;
+  padding-inline: 1rem;
+  @media (min-width: 768px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+/* ── Navigation ───────────────────────────────────────────── */
+
+/* A menu's contents settling into the panel as it opens or changes. */
+@keyframes nav-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.nav-panel-in {
+  animation: nav-panel-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Dialog ───────────────────────────────────────────────── */
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes overlay-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.98);
+  }
+}
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.98);
+  }
+}
+.dialog-overlay[data-state="open"] {
+  animation: overlay-in 200ms ease-out;
+}
+.dialog-overlay[data-state="closed"] {
+  animation: overlay-out 160ms ease-in;
+}
+.dialog-content[data-state="open"] {
+  animation: dialog-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dialog-content[data-state="closed"] {
+  animation: dialog-out 160ms ease-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel-in,
+  .dialog-overlay,
+  .dialog-content {
+    animation: none !important;
+  }
+}
+
+/* ── Brand pattern ────────────────────────────────────────── */
+
+/* The pattern from the brand kit, used where a painted scene would sit: big
+   ink, tint and signal blocks bleeding off the edges, and the loop drawn
+   large and quiet. `.pattern-dark` keeps the dark palette in either theme. */
+.pattern {
+  --pat-ground: #ebe7df;
+  --pat-solid: #121316;
+  --pat-quiet: #dcd6c9;
+  --pat-loop: #ddd7ca;
+  --pat-dot: #cfc8b9;
+}
+.pattern-dark {
+  --pat-ground: #121316;
+  --pat-solid: #f5f3ee;
+  --pat-quiet: #2c2e34;
+  --pat-loop: #26282d;
+  --pat-dot: #3a3d44;
+}
+@media (prefers-color-scheme: dark) {
+  .pattern {
+    --pat-ground: #17181b;
+    --pat-solid: #f5f3ee;
+    --pat-quiet: #2c2e34;
+    --pat-loop: #26282d;
+    --pat-dot: #3a3d44;
+  }
+  .pattern-dark {
+    --pat-ground: #0b0c0e;
+  }
+}
