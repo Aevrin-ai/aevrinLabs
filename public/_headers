@@ -7,6 +7,10 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+# The launch film and its poster keep their names when replaced, so a week.
+/video/*
+  Cache-Control: public, max-age=604800
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

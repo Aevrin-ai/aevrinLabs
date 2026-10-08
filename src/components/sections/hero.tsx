@@ -4,9 +4,11 @@ import * as m from "motion/react-m";
 
 import { cn } from "@/lib/utils";
 import { EASE } from "@/lib/ease";
+import { LAUNCH_FILM, playLaunchFilm } from "@/lib/launch-film";
 import { HEADING } from "@/components/ui/blocks";
 import { LogoMark } from "@/components/ui/logo";
 import { Pill } from "@/components/ui/pill";
+import { Play } from "@/components/ui/solar-icons";
 import Console from "@/components/mockups/console";
 import { useWaitlist } from "@/components/waitlist/context";
 
@@ -77,9 +79,19 @@ export default function Hero() {
             Join the waitlist
             <ArrowRight aria-hidden="true" className="transition-transform group-hover:translate-x-0.5" />
           </Pill>
-          <Pill size="lg" variant="outline" to="/contact">
-            Talk to us
-          </Pill>
+          {/* A white pill with a dark play circle, the label and the length.
+              It scrolls to the launch film below and starts it. */}
+          <button
+            type="button"
+            onClick={playLaunchFilm}
+            className="group border-border bg-window text-foreground hover:bg-muted inline-flex h-12 shrink-0 items-center justify-center gap-3 rounded-full border pr-6 pl-1.5 transition-colors md:h-[50px]"
+          >
+            <span className="bg-foreground text-background grid size-9 place-items-center rounded-full transition-transform duration-300 group-hover:scale-105">
+              <Play aria-hidden="true" className="ml-0.5 size-4" />
+            </span>
+            <span className="text-base font-medium md:text-[17px]">Watch the launch</span>
+            <span className="text-muted-foreground text-[15px] tabular-nums">{LAUNCH_FILM.length}</span>
+          </button>
         </m.div>
 
         {/* The app, cut off by the bottom of the section like a screenshot

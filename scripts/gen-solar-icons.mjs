@@ -39,6 +39,7 @@ const ICONS = {
   Letter: "letter-bold",
   UsersGroupRounded: "users-group-rounded-bold",
   UserRounded: "user-rounded-bold",
+  Play: "play-bold",
 };
 
 const camel = (attr) => attr.replace(/-([a-z])/g, (_, c) => c.toUpperCase());

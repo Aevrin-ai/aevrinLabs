@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import { BRAND } from "@/lib/site";
 import Footer from "@/components/sections/footer";
 import Hero from "@/components/sections/hero";
+import LaunchFilm from "@/components/sections/launch-film";
 import Navbar from "@/components/sections/navbar";
 import { PageMeta } from "@/components/ui/page-meta";
 import WaitlistProvider from "@/components/waitlist/provider";
@@ -69,6 +70,7 @@ function HomePage() {
         description={`${BRAND} shows you every AI agent at work, what it can reach and what it costs, and stops it before it goes too far.`}
       />
       <Hero />
+      <LaunchFilm />
       <Suspense fallback={<div className="min-h-screen" />}>{ready ? <HomeBelowFold /> : <div className="min-h-screen" />}</Suspense>
     </main>
   );
