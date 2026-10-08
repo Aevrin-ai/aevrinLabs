@@ -1,0 +1,14 @@
+// The site on Cloudflare: a Worker that serves the built files in dist/.
+// Any path that is not a file gets index.html, so the router can show the page
+// (or the 404 page). Response headers live in public/_headers.
+{
+  "name": "aevrinlabs",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [{ "pattern": "aevrinlabs.com", "custom_domain": true }],
+  // Served only at aevrinlabs.com, not at a second workers.dev address.
+  "workers_dev": false
+}

@@ -1,0 +1,86 @@
+# Checks every change, and puts main live on Cloudflare.
+#
+# A push to main that touches the site (code, styles, public files, packages
+# or build config) is linted, tested, built and deployed to aevrinlabs.com.
+# Pull requests get the same checks without the deploy. Changes to anything
+# else, such as the brand kit in assets/, do not trigger a run.
+
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "tests/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - "vitest.config.ts"
+      - "tsconfig*.json"
+      - "eslint.config.js"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "tests/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - "vitest.config.ts"
+      - "tsconfig*.json"
+      - "eslint.config.js"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+# A newer push to the same branch replaces a run still in progress.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-deploy:
+    name: Check and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # The Formspree form behind the waitlist and contact forms. Set it
+          # under Settings > Secrets and variables > Actions > Variables.
+          VITE_FORMSPREE_ID: ${{ vars.VITE_FORMSPREE_ID }}
+
+      - name: Deploy to Cloudflare
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Reads wrangler.jsonc: the aevrinlabs Worker, serving dist/ at aevrinlabs.com.
+          command: deploy
